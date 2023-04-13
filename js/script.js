@@ -3,19 +3,16 @@ Treehouse Techdegree:
 FSJS Project 2 - Data Pagination and Filtering
 */
 
-
-/*
-For assistance:
-   Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
-   Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
-*/
-
 let itemsPerPage = 9;
 
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
+/**
+ * Creates and insert/append the elements needed to display a "page" of nine students
+ *
+ * @param {array} list - choose array of students.
+ * @param {page} number - the page number wished to be displayed.
+ *
+ * @returns - HTML snippet with information for each student in the array.
+ */
 
 function showPage(list, page) {
    let startIndex = (page * itemsPerPage) - itemsPerPage;
@@ -58,21 +55,20 @@ function showPage(list, page) {
 
          // inserts HTML snippet into index.html at div with class "student-list"
          studentList.insertAdjacentHTML("beforeend", studentHtml);
-      } else {
-         console.log("nope")
       };
    }
 
    
 };
 
-showPage(data,1);
 
-
-/*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
-*/
+/**
+ * Creates and insert/append the elements needed for the pagination buttons
+ *
+ * @param {array} list - choose array of students.
+ *
+ * @returns - HTML snippet of buttons at bottom of page to flip through pages of students. 
+ */
 
 function addPagination(list) {
    let buttons = Math.ceil(list.length / itemsPerPage);
@@ -80,6 +76,7 @@ function addPagination(list) {
    let linkList = document.querySelector(".link-list");
    linkList.innerHTML = "";
 
+   // creates li elements with buttons inside that allows for pagination of data, dynamically updates depending on size of student list
    for (i = 1; i <= buttons; i++) {
       let buttonHtml = "";
       buttonHtml += `
@@ -89,12 +86,27 @@ function addPagination(list) {
       `;
       linkList.insertAdjacentHTML("beforeend", buttonHtml);
    };
-   // create button elements
-   // append buttons
+
+   // give first pagination button class name "active"
+   document.querySelector(".link-list button").className = "active";
+   let pageButtons = document.querySelectorAll(".link-list button");
+
+   // filter "active" class for pagination buttons when clicked and display proper page
+   linkList.addEventListener("click", function(e) {
+      if(e.target.tagName === "BUTTON") {
+        pageButtons.forEach(el => el.classList.remove('active'));
+        e.target.className = "active";
+        let clickedPage = e.target.textContent;
+        showPage(data,clickedPage);
+      } 
+      
+   });
+
 };
 
 
 // Call functions
+showPage(data,1);
 addPagination(data);
 
 
